@@ -10,5 +10,5 @@ Source it
 
 #### Preview
 
-![miniprompt](screenshots\miniprompt.png)
+![miniprompt](screenshots/miniprompt.png)
 
