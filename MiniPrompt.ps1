@@ -81,6 +81,28 @@ $global:PSColor = @{
     Logic taken from posh-git that sets the $GitPromptSettings.AnsiConsole bool:
     [bool]$AnsiConsole = $Host.UI.SupportsVirtualTerminal -or ($Env:ConEmuANSI -eq "ON")
 #>
+
+function Write-Prompt($Object, $ForegroundColor = $null, $BackgroundColor = $null) {
+    if ($BackgroundColor -is [string]) {
+        $BackgroundColor = [ConsoleColor]$BackgroundColor
+    }
+    if ($ForegroundColor -is [string]) {
+        $ForegroundColor = [ConsoleColor]$ForegroundColor
+    }
+
+    $writeHostParams = @{
+        Object = $Object;
+        NoNewLine = $true;
+    }
+    if (($BackgroundColor -ge 0) -and ($BackgroundColor -le 15)) {
+        $writeHostParams.BackgroundColor = $BackgroundColor
+    }
+    if (($ForegroundColor -ge 0) -and ($ForegroundColor -le 15)) {
+        $writeHostParams.ForegroundColor = $ForegroundColor
+    }
+    Write-Host @writeHostParams
+}
+
 function Test-IsVanillaWindow {
     $hasAnsiSupport = (Test-AnsiTerminal) -or ($Env:ConEmuANSI -eq "ON") -or ($env:PROMPT) -or ($env:TERM_PROGRAM -eq "Hyper") -or ($env:TERM_PROGRAM -eq "vscode")
     return !$hasAnsiSupport
